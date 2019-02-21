@@ -3,11 +3,12 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"os"
-	"flag"
-	"github.com/aybabtme/rgbterm"
+
 	"github.com/archervanderwaal/jadetrans/utils"
+	"github.com/aybabtme/rgbterm"
 )
 
 const (
@@ -25,9 +26,9 @@ const (
 )
 
 var (
-	voice bool
-	engine string
-	help bool
+	voice   bool
+	engine  string
+	help    bool
 	version bool
 )
 
@@ -40,7 +41,7 @@ func init() {
 	flag.Parse()
 }
 
-func main()  {
+func main() {
 	words, _ := utils.ParseArgs(os.Args)
 	if version {
 		showVersion()
