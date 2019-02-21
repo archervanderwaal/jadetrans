@@ -1,0 +1,9 @@
+package: github.com/archervanderwaal/jadetrans
+homepage: https://github.com/archervanderwaal/jadetrans
+license: MIT
+owners:
+- name: Archer Vanderwaal
+  email: archer.vanderwaal@gmail.com
+  homepage: https://archervanderwaal.com
+import:
+- package: github.com/aybabtme/rgbterm
