@@ -6,6 +6,7 @@ import (
 	"github.com/briandowns/spinner"
 	"time"
 	"sync/atomic"
+	"fmt"
 )
 
 var (
@@ -31,7 +32,9 @@ func NewDefaultSpinnerAndStart(prefix string) uint64 {
 
 // StopSpinner are defined for stop spinner according to id.
 func StopSpinner(id uint64) {
-	s := spinners[id]
-	s.Stop()
-	delete(spinners, id)
+	if s, ok := spinners[id]; ok {
+		s.Stop()
+		delete(spinners, id)
+		fmt.Println(len(spinners))
+	}
 }
