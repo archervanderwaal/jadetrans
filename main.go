@@ -1,5 +1,4 @@
-// Copyright 2019 Archer VanderWaal. All rights reserved.
-// license that can be found in the LICENSE file.
+// Package main Entrance.
 package main
 
 import (
@@ -41,8 +40,11 @@ var (
 func init() {
 	flag.BoolVar(&help, "h", false, "Show usage and exit.")
 	flag.BoolVar(&version, "v", false, "Show version and exit.")
-	flag.StringVar(&eng, "e", "youdao", "Set translate engine(Is access to Google translation engine).")
-	flag.StringVar(&voice, "voice", "", "Set which voice to read aloud. 0 is female voice and 1 is male voice(It can only be used on Linux or MacOsx os).")
+	flag.StringVar(&eng, "e", "youdao",
+		"Set translate engine(Is access to Google translation engine).")
+	flag.StringVar(&voice, "voice", "",
+		"Set which voice to read aloud. 0 is female voice and 1 is male voice" +
+		"(It can only be used on Linux or MacOsx os).")
 	flag.Usage = usage
 	flag.Parse()
 }

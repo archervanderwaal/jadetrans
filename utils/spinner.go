@@ -1,5 +1,4 @@
-// Copyright 2019 Archer VanderWaal. All rights reserved.
-// license that can be found in the LICENSE file.
+// Package utils Provides some tools about progress bar.
 package utils
 
 import (
@@ -11,7 +10,7 @@ import (
 var (
 	// Save the created spinner.
 	spinners map[uint64]*spinner.Spinner
-	count    uint64 = 0
+	count    uint64
 )
 
 // NewDefaultSpinnerAndStart are defined for create a spinner use default configuration,

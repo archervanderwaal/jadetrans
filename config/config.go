@@ -1,5 +1,4 @@
-// Copyright 2019 Archer VanderWaal. All rights reserved.
-// license that can be found in the LICENSE file.
+// Package config Provides loading local configuration
 package config
 
 import (
@@ -40,11 +39,13 @@ func location() string {
 	return configFile
 }
 
+// YoudaoConfig configuration information encapsulated with youdao Translation.
 type YoudaoConfig struct {
 	AppKey    string `yaml:"appKey"`
 	AppSecret string `yaml:"appSecret"`
 }
 
+// Config jadetrans global config.
 type Config struct {
 	Youdao YoudaoConfig `yaml:"youdao"`
 }

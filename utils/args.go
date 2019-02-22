@@ -1,7 +1,4 @@
-// Copyright 2019 Archer VanderWaal. All rights reserved.
-// license that can be found in the LICENSE file.
-//
-// Package Utils
+// Package utils Provides some tools about arguments operation.
 package utils
 
 import (

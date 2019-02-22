@@ -1,9 +1,9 @@
-// Copyright 2019 Archer VanderWaal. All rights reserved.
-// license that can be found in the LICENSE file.
+// Package utils Provides some tools about uuid.
 package utils
 
 import "github.com/satori/go.uuid"
 
-func Uuid() string {
+// UUID returns uuid.
+func UUID() string {
 	return uuid.Must(uuid.NewV4(), nil).String()
 }
