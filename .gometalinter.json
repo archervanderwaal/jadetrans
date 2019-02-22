@@ -1,5 +1,18 @@
 {
-  "Vendor": true,
-  "DisableAll": true,
-  "Enable": ["goimports", "golint", "vet", "vetshadow", "deadcode", "gosimple"]
+  "Deadline": "2m",
+  "Enable": [
+    "goimports",
+    "golint",
+    "ineffassign",
+    "lll",
+    "misspell",
+    "vet",
+    "varcheck",
+    "deadcode",
+    "structcheck"
+  ],
+  "Exclude": [
+    "snapshots/"
+  ],
+  "LineLength": 100
 }
