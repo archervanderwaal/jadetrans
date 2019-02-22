@@ -30,19 +30,11 @@ func Home() string {
 	return homeDir
 }
 
-// SetHome sets the home directory for Jadetrans.
-func SetHome(home string) {
-	homeDir = home
-}
-
 // Exists returns does a file or folder exist
 func Exists(path string) bool {
 	_, err := os.Stat(path)
-	if err != nil {
-		if os.IsExist(err) {
-			return true
-		}
-		return false
+	if err == nil {
+		return true
 	}
-	return true
+	return false
 }

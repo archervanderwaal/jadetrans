@@ -101,7 +101,7 @@ func (e *YoudaoEngine) requestURL() string {
 func truncate(query string) string {
 	queryRune := []rune(query)
 	if queryLen := utf8.RuneCountInString(query); queryLen > 20 {
-		return fmt.Sprintf("%s%s%s", string(queryRune[:10]), queryLen, string(queryRune[queryLen-10:]))
+		return fmt.Sprintf("%s%d%s", string(queryRune[:10]), queryLen, string(queryRune[queryLen-10:]))
 	} else {
 		return query
 	}

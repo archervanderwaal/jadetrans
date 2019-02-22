@@ -11,13 +11,12 @@ notifications:
       - archer.vanderwaal@gmail.com
     on_success: always
     on_failure: always
-before_install:
-  - go get github.com/mattn/goveralls
-  - go get github.com/Masterminds/glide
-  - go get -u github.com/alecthomas/gometalinter
-  - gometalinter --install
 install:
+  - go get -u github.com/mattn/goveralls
+  - go get -u github.com/Masterminds/glide
   - glide install -v
+  - go get -u github.com/alecthomas/gometalinter
 script:
-  - gometalinter --config=config.json ./...
-  - goveralls -service=travis-ci
+  - gometalinter --install
+  - gometalinter --config=.gometalinter.json --vendor ./...
+  - goveralls -service=travis-ci -repotoken IX5LNpFSAM3muYPrSFZuEbgTK4a7RBKLh

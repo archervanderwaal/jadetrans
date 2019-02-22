@@ -5,7 +5,7 @@ package engine
 import (
 	"github.com/archervanderwaal/jadetrans/config"
 	"testing"
-)
+	)
 
 var engine *YoudaoEngine
 

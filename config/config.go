@@ -11,25 +11,14 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"sync"
-)
+	)
 
 const (
 	configFile = "jadetrans.yaml"
 )
 
-var isSetup bool
-
-var setupMutex sync.Mutex
-
 // Setup creates the home dir and config file.
 func setup() {
-	setupMutex.Lock()
-	defer setupMutex.Unlock()
-
-	if isSetup {
-		return
-	}
 	if !path.Exists(path.Home()) {
 		os.Mkdir(path.Home(), 0755)
 	}
@@ -42,13 +31,6 @@ func setup() {
 		defer file.Close()
 		fmt.Fprintf(file, "youdao:\n  appKey: %s\n  appSecret: %s\n", "", "")
 	}
-	isSetup = true
-}
-
-// SetupReset resets if setup has been completed. The next time setup is run
-// it will attempt a full setup.
-func setupReset() {
-	isSetup = false
 }
 
 // Location returns the location of the config file.

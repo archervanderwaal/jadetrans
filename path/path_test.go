@@ -3,8 +3,7 @@
 package path
 
 import (
-	"fmt"
-	"testing"
+		"testing"
 )
 
 func TestExists(t *testing.T) {
@@ -16,5 +15,4 @@ func TestExists(t *testing.T) {
 	if !Exists(existPath) {
 		t.Errorf("not expected")
 	}
-	fmt.Println(Exists(notExistPath), Exists(existPath))
 }
