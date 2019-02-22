@@ -1,0 +1,17 @@
+language: go
+sudo: false
+go:
+  - 1.10.x
+os:
+  - osx
+  - linux
+before_install:
+  - go get github.com/mattn/goveralls
+  - go get github.com/Masterminds/glide
+  - go get -u github.com/alecthomas/gometalinter
+  - gometalinter --install
+install:
+  - glide install -v
+script:
+  - gometalinter --config=config.json ./...
+  - goveralls -service=travis-ci
