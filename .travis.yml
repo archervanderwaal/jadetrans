@@ -5,6 +5,12 @@ go:
 os:
   - osx
   - linux
+notifications:
+  email:
+    recipients:
+      - archer.vanderwaal@gmail.com
+    on_success: always
+    on_failure: always
 before_install:
   - go get github.com/mattn/goveralls
   - go get github.com/Masterminds/glide

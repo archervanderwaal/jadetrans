@@ -22,10 +22,10 @@ A very geeky command line translation tool.
 
 ## Features
 
-[x] Chinese <=> English
-[] Speech
-[] Others language support
-[] Google translation engine
+- [x] Chinese <=> English
+- [ ] Speech
+- [ ] Others language support
+- [ ] Google translation engine
 
 ## Installation
 
