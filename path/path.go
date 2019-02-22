@@ -3,9 +3,9 @@
 package path
 
 import (
-	"path/filepath"
-	"os"
 	"github.com/mitchellh/go-homedir"
+	"os"
+	"path/filepath"
 )
 
 // Cache the location of the home directory.

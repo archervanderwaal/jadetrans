@@ -4,10 +4,8 @@ package config
 
 import (
 	"testing"
-	"fmt"
 )
 
 func TestLoadConfig(t *testing.T) {
-	config := LoadConfig()
-	fmt.Println(config.Youdao.AppId, config.Youdao.AppKey)
+	LoadConfig()
 }

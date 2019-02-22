@@ -3,17 +3,19 @@
 package config
 
 import (
-	"sync"
+	"fmt"
 	"github.com/archervanderwaal/jadetrans/path"
+	"github.com/aybabtme/rgbterm"
+	"gopkg.in/yaml.v1"
+	"io/ioutil"
+	"log"
 	"os"
 	"path/filepath"
-	"fmt"
-	"io/ioutil"
-	"gopkg.in/yaml.v1"
+	"sync"
 )
 
 const (
-	configFile	=    "jadetrans.yaml"
+	configFile = "jadetrans.yaml"
 )
 
 var isSetup bool
@@ -33,10 +35,12 @@ func setup() {
 	}
 	if !path.Exists(filepath.Join(path.Home(), configFile)) {
 		file, err := os.Create(filepath.Join(path.Home(), configFile))
-		defer file.Close()
-		if err == nil {
-			fmt.Fprintf(file, "youdao:\n  appId: %s\n  appKey: %s\n", "", "")
+		if err != nil {
+			log.Println(rgbterm.FgString("Internal error "+err.Error(), 255, 0, 0))
+			os.Exit(1)
 		}
+		defer file.Close()
+		fmt.Fprintf(file, "youdao:\n  appKey: %s\n  appSecret: %s\n", "", "")
 	}
 	isSetup = true
 }
@@ -55,20 +59,22 @@ func location() string {
 }
 
 type YoudaoConfig struct {
-	AppId    	string `yaml:"appId"`
-	AppKey   	string `yaml:"appKey"`
+	AppKey    string `yaml:"appKey"`
+	AppSecret string `yaml:"appSecret"`
 }
 
 type Config struct {
-	Youdao 		YoudaoConfig `yaml:"youdao"`
+	Youdao YoudaoConfig `yaml:"youdao"`
 }
 
+// LoadConfig returns jadetrans config.
 func LoadConfig() *Config {
 	var settings Config
 	configFile, err := ioutil.ReadFile(location())
-	if err == nil {
-		yaml.Unmarshal(configFile, &settings)
+	if err != nil {
+		log.Println(rgbterm.FgString("Internal error "+err.Error(), 255, 0, 0))
+		os.Exit(1)
 	}
+	yaml.Unmarshal(configFile, &settings)
 	return &settings
 }
-

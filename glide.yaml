@@ -11,3 +11,5 @@ import:
   version: "1.4"
 - package: github.com/mitchellh/go-homedir
   version: v1.1.0
+- package: github.com/satori/go.uuid
+  version: v1.2.0

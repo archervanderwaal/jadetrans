@@ -7,15 +7,21 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/archervanderwaal/jadetrans/config"
+	"github.com/archervanderwaal/jadetrans/engine"
 	"github.com/archervanderwaal/jadetrans/utils"
 	"github.com/aybabtme/rgbterm"
+	"log"
+	"strings"
 )
 
 const (
-	Version                = "1.0"
-	Usage                  = "Usage of jadetrans: jadetrans <Sentences to be translated> <command>"
-	IllegalParametersError = "Illegal parameters error."
-	Logo                   = `
+	// Version the version of jadetrans.
+	Version = "1.0"
+	// Usage usage of jadetrans.
+	Usage = "Usage of jadetrans: jadetrans <Sentences to be translated> <command>"
+	// Logo the logo of jadetrans.
+	Logo = `
        __          __   ______                     
       / /___ _____/ /__/_  __/________ _____  _____
  __  / / __ / __  / _ \/ / / ___/ __ / __ \/ ___/
@@ -26,17 +32,17 @@ const (
 )
 
 var (
-	voice   bool
-	engine  string
-	help    bool
 	version bool
+	eng     string
+	help    bool
+	voice   string
 )
 
 func init() {
-	flag.BoolVar(&help, "help", false, "Show usage and exit")
-	flag.BoolVar(&version, "version", false, "Show version and exit")
-	flag.StringVar(&engine, "engine", "youdao", "Set translate engine [youdao, google]")
-	flag.BoolVar(&voice, "voice", false, "Set up the sound to read aloud")
+	flag.BoolVar(&help, "h", false, "Show usage and exit.")
+	flag.BoolVar(&version, "v", false, "Show version and exit.")
+	flag.StringVar(&eng, "e", "youdao", "Set translate engine(Is access to Google translation engine).")
+	flag.StringVar(&voice, "voice", "", "Set which voice to read aloud. 0 is female voice and 1 is male voice(It can only be used on Linux or MacOsx os).")
 	flag.Usage = usage
 	flag.Parse()
 }
@@ -45,12 +51,20 @@ func main() {
 	words, _ := utils.ParseArgs(os.Args)
 	if version {
 		showVersion()
-	} else if help {
-		flag.Usage()
-	} else if len(words) < 1 {
-		showIllegalParametersError()
+	} else if help || len(words) < 1 {
 		flag.Usage()
 	}
+
+	// trans.
+	// TODO google translate engine.
+	conf := config.LoadConfig()
+	e, err := engine.NewYoudaoEngine(strings.Join(words, " "), "auto", "auto", voice, conf)
+	if err != nil {
+		log.Println(rgbterm.FgString(err.Error(), 255, 0, 0))
+		os.Exit(1)
+	}
+	res := e.Query()
+	fmt.Println(res)
 }
 
 func usage() {
@@ -60,15 +74,11 @@ func usage() {
 	usage := rgbterm.FgString(Usage, 255, 66, 225)
 	fmt.Fprintf(os.Stderr, fmt.Sprintf("%s\n\n%s\n", logo, usage))
 	flag.PrintDefaults()
+	os.Exit(0)
 }
 
 func showVersion() {
 	version := rgbterm.FgString(Version, 0, 255, 0)
 	fmt.Println(version)
-}
-
-func showIllegalParametersError() {
-	// #FF0000
-	inputIllegalParametersError := rgbterm.FgString(IllegalParametersError, 255, 0, 0)
-	fmt.Fprintf(os.Stderr, inputIllegalParametersError)
+	os.Exit(0)
 }

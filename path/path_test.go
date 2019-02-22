@@ -3,8 +3,8 @@
 package path
 
 import (
-	"testing"
 	"fmt"
+	"testing"
 )
 
 func TestExists(t *testing.T) {

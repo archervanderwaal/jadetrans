@@ -4,24 +4,23 @@ package utils
 
 import (
 	"github.com/briandowns/spinner"
-	"time"
 	"sync/atomic"
-	"fmt"
+	"time"
 )
 
 var (
 	// Save the created spinner.
-	spinners 	map[uint64]*spinner.Spinner
-	count 		uint64 = 0
+	spinners map[uint64]*spinner.Spinner
+	count    uint64 = 0
 )
 
 // NewDefaultSpinnerAndStart are defined for create a spinner use default configuration,
 // and start it.
 func NewDefaultSpinnerAndStart(prefix string) uint64 {
 	if spinners == nil {
-		 spinners = make(map[uint64]*spinner.Spinner)
+		spinners = make(map[uint64]*spinner.Spinner)
 	}
-	s := spinner.New(spinner.CharSets[36], 100 * time.Millisecond)
+	s := spinner.New(spinner.CharSets[36], 100*time.Millisecond)
 	s.Prefix = prefix
 	s.Color("green")
 	s.Start()
@@ -35,6 +34,5 @@ func StopSpinner(id uint64) {
 	if s, ok := spinners[id]; ok {
 		s.Stop()
 		delete(spinners, id)
-		fmt.Println(len(spinners))
 	}
 }
