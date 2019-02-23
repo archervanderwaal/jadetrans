@@ -5,22 +5,49 @@ import (
 	"crypto/sha256"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"net/http"
+	"net/url"
+	"strings"
+	"unicode/utf8"
+
 	"github.com/archervanderwaal/jadetrans/config"
 	"github.com/archervanderwaal/jadetrans/utils"
 	"github.com/aybabtme/rgbterm"
-	"io/ioutil"
-	"log"
-	"net/http"
-	"net/url"
-	"os"
-	"strings"
-	"unicode/utf8"
+)
+
+var (
+	errCodeMsgMap = map[string]string{
+		"101": "缺少必填的参数，出现这个情况还可能是et的值和实际加密方式不对应",
+		"102": "不支持的语言类型",
+		"103": "翻译文本过长",
+		"104": "不支持的API类型",
+		"105": "不支持的签名类型",
+		"106": "不支持的响应类型",
+		"107": "不支持的传输加密类型",
+		"108": "appKey无效,后台创建应用和实例并完成绑定,可获得应用ID和密钥等信息，其中应用ID就是appKey（注意不是应用密钥）",
+		"109": "batchLog格式不正确",
+		"110": "无相关服务的有效实例",
+		"111": "开发者账号无效",
+		"113": "q不能为空",
+		"201": "解密失败，可能为DES,BASE64,URLDecode的错误",
+		"202": "签名检验失败",
+		"203": "访问IP地址不在可访问IP列表",
+		"205": "请求的接口与应用的平台类型不一致，如有疑问请参考[入门指南]()",
+		"206": "因为时间戳无效导致签名校验失败",
+		"207": "重放请求",
+		"301": "辞典查询失败",
+		"302": "翻译查询失败",
+		"303": "服务端的其它异常",
+		"401": "账户已经欠费停",
+		"411": "访问频率受限,请稍后访问",
+		"412": "长请求过于频繁，请稍后访问",
+	}
 )
 
 const (
-	api          = "http://openapi.youdao.com/api"
-	appKeyLen    = 16
-	appSecretLen = 32
+	api            = "http://openapi.youdao.com/api"
+	successErrCode = "0"
 )
 
 // YoudaoEngine Represents a type that uses youdao translation.
@@ -39,15 +66,7 @@ type YoudaoEngine struct {
 }
 
 // NewYoudaoEngine Returns an instance with translation functionality.
-func NewYoudaoEngine(query, from, to, voice string, conf *config.Config) (*YoudaoEngine, error) {
-	if len(query) < 1 {
-		return nil, fmt.Errorf(fmt.Sprintf("Please enter the text to be translated"))
-	}
-	if len(strings.TrimSpace(conf.Youdao.AppKey)) != appKeyLen ||
-					len(strings.TrimSpace(conf.Youdao.AppSecret)) != appSecretLen {
-		return nil, fmt.Errorf(fmt.Sprintf(
-			"Empty or incorrectly youdao appKey and appSecret: %s", conf.Youdao.AppKey))
-	}
+func NewYoudaoEngine(query, from, to, voice string, conf *config.Config) *YoudaoEngine {
 	e := &YoudaoEngine{
 		appKey:    conf.Youdao.AppKey,
 		appSecret: conf.Youdao.AppSecret,
@@ -65,24 +84,30 @@ func NewYoudaoEngine(query, from, to, voice string, conf *config.Config) (*Youda
 	sum := sha256.Sum256([]byte(fmt.Sprintf("%s%s%s%s%s", e.appKey,
 		truncate(e.query), e.salt, e.curTime, e.appSecret)))
 	e.sign = strings.ToLower(fmt.Sprintf("%x", sum))
-	return e, nil
+	return e
 }
 
 // Query Returns formatted translate results.
-func (e *YoudaoEngine) Query() string {
+func (e *YoudaoEngine) Query() (res string, err error) {
+	var resp *http.Response
 	spinnerID := utils.NewDefaultSpinnerAndStart("Querying...")
-	resp, err := http.Get(e.requestURL())
+	defer utils.StopSpinner(spinnerID)
+	resp, err = http.Get(e.requestURL())
 	if err != nil {
-		// err
-		log.Println(rgbterm.BgString(err.Error(), 255, 0, 0))
-		os.Exit(1)
+		return
 	}
 	defer resp.Body.Close()
-	res, _ := ioutil.ReadAll(resp.Body)
-	result := e.generateResult(res)
-	formatRes := result.format()
-	utils.StopSpinner(spinnerID)
-	return formatRes
+	var bytes []byte
+	bytes, err = ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return
+	}
+	result := e.generateResult(bytes)
+	if err = result.success(); err != nil {
+		return
+	}
+	res, err = result.format(), nil
+	return
 }
 
 func (e *YoudaoEngine) requestURL() string {
@@ -180,4 +205,15 @@ func (res *result) format() string {
 	}
 	content += line
 	return content
+}
+
+func (res *result) success() error {
+	if res == nil || res.ErrorCode != successErrCode {
+		errMsg := "未知的错误"
+		if _, ok := errCodeMsgMap[res.ErrorCode]; ok {
+			errMsg = errCodeMsgMap[res.ErrorCode]
+		}
+		return fmt.Errorf(rgbterm.FgString(fmt.Sprintf("Error occurred: %s", errMsg), 255, 0, 0))
+	}
+	return nil
 }

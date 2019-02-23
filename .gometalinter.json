@@ -1,6 +1,7 @@
 {
   "Deadline": "2m",
   "Enable": [
+    "goimports",
     "golint",
     "ineffassign",
     "lll",
@@ -13,5 +14,5 @@
   "Exclude": [
     "snapshots/"
   ],
-  "LineLength": 100
+  "LineLength": 150
 }

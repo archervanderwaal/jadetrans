@@ -6,12 +6,12 @@ import (
 	"fmt"
 	"os"
 
+	"strings"
+
 	"github.com/archervanderwaal/jadetrans/config"
 	"github.com/archervanderwaal/jadetrans/engine"
 	"github.com/archervanderwaal/jadetrans/utils"
 	"github.com/aybabtme/rgbterm"
-	"log"
-	"strings"
 )
 
 const (
@@ -43,8 +43,8 @@ func init() {
 	flag.StringVar(&eng, "e", "youdao",
 		"Set translate engine(Is access to Google translation engine).")
 	flag.StringVar(&voice, "voice", "",
-		"Set which voice to read aloud. 0 is female voice and 1 is male voice" +
-		"(It can only be used on Linux or MacOsx os).")
+		"Set which voice to read aloud. 0 is female voice and 1 is male voice"+
+			"(It can only be used on Linux or MacOsx os).")
 	flag.Usage = usage
 	flag.Parse()
 }
@@ -60,12 +60,12 @@ func main() {
 	// trans.
 	// TODO google translate engine.
 	conf := config.LoadConfig()
-	e, err := engine.NewYoudaoEngine(strings.Join(words, " "), "auto", "auto", voice, conf)
+	e := engine.NewYoudaoEngine(strings.Join(words, " "), "auto", "auto", voice, conf)
+	res, err := e.Query()
 	if err != nil {
-		log.Println(rgbterm.FgString(err.Error(), 255, 0, 0))
+		fmt.Println(err.Error())
 		os.Exit(1)
 	}
-	res := e.Query()
 	fmt.Println(res)
 }
 

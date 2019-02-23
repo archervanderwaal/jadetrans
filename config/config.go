@@ -10,7 +10,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	)
+)
 
 const (
 	configFile = "jadetrans.yaml"
