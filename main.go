@@ -1,4 +1,9 @@
-// Package main Entrance.
+// Copyright (c) 2019 Archer VanderWaal.
+//
+// A very geeky command line translation tool.
+// Source code and other details for the project are available at GitHub:
+//
+// https://github.com/archervanderwaal/jadetrans
 package main
 
 import (

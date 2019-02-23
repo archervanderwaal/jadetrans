@@ -1,4 +1,3 @@
-// Package engine Provides function to translate.
 package engine
 
 import (
@@ -50,7 +49,7 @@ const (
 	successErrCode = "0"
 )
 
-// YoudaoEngine Represents a type that uses youdao translation.
+// YoudaoEngine contains some parameters that you want to use youdao Translation Service.
 type YoudaoEngine struct {
 	appKey    string
 	appSecret string
@@ -65,7 +64,7 @@ type YoudaoEngine struct {
 	salt      string
 }
 
-// NewYoudaoEngine Returns an instance with translation functionality.
+// NewYoudaoEngine create a translation engine for you based on youdao Translation Service.
 func NewYoudaoEngine(query, from, to, voice string, conf *config.Config) *YoudaoEngine {
 	e := &YoudaoEngine{
 		appKey:    conf.Youdao.AppKey,
@@ -87,7 +86,7 @@ func NewYoudaoEngine(query, from, to, voice string, conf *config.Config) *Youdao
 	return e
 }
 
-// Query Returns formatted translate results.
+// Query returns the translation results without errors.
 func (e *YoudaoEngine) Query() (res string, err error) {
 	var resp *http.Response
 	spinnerID := utils.NewDefaultSpinnerAndStart("Querying...")
@@ -180,14 +179,12 @@ func (res *result) format() string {
 		content += "\n\n"
 	}
 
-	// trans format
 	if len(res.Basic.Explains) == 0 {
 		for _, tran := range res.Translation {
 			content += rgbterm.FgString(fmt.Sprintf("    %s\n", tran), 0, 255, 0)
 		}
 	}
 
-	// format explains
 	if len(res.Basic.Explains) != 0 {
 		for _, exp := range res.Basic.Explains {
 			content += rgbterm.FgString(fmt.Sprintf("    %s", exp), 0, 255, 0)
@@ -197,7 +194,6 @@ func (res *result) format() string {
 	}
 
 	if len(res.Web) != 0 {
-		// web explains format
 		for inx, w := range res.Web {
 			content += rgbterm.FgString(fmt.Sprintf("    %d. %s\n", inx+1, w.Key), 0, 255, 0)
 			content += rgbterm.FgString(fmt.Sprintf("       %s\n", strings.Join(w.Value, ", ")), 255, 0, 255)

@@ -1,4 +1,3 @@
-// Package utils Provides some tools about uuid.
 package utils
 
 import "github.com/satori/go.uuid"

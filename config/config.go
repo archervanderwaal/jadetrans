@@ -1,15 +1,21 @@
-// Package config Provides loading local configuration
+// Package config Provides loading local configuration.
+//
+// Source code and other details for the project are available at GitHub:
+//
+// https://github.com/archervanderwaal/jadetrans
 package config
 
 import (
 	"fmt"
-	"github.com/archervanderwaal/jadetrans/path"
-	"github.com/aybabtme/rgbterm"
-	"gopkg.in/yaml.v1"
 	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
+
+	"gopkg.in/yaml.v1"
+
+	"github.com/archervanderwaal/jadetrans/path"
+	"github.com/aybabtme/rgbterm"
 )
 
 const (

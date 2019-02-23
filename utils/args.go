@@ -1,4 +1,3 @@
-// Package utils Provides some tools about arguments operation.
 package utils
 
 import (
@@ -6,7 +5,7 @@ import (
 )
 
 // ParseArgs are defined for parsing parameters,
-// and return values are the sentences or words and query parameters to be queried.
+// and returns values are the sentences or words and query parameters to be queried.
 func ParseArgs(osArgs []string) ([]string, []string) {
 	words := make([]string, 0)
 	args := []string{osArgs[0]}

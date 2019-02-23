@@ -1,4 +1,3 @@
-// Package utils Provides some tools about time.
 package utils
 
 import (

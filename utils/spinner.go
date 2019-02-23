@@ -1,14 +1,13 @@
-// Package utils Provides some tools about progress bar.
 package utils
 
 import (
-	"github.com/briandowns/spinner"
 	"sync/atomic"
 	"time"
+
+	"github.com/briandowns/spinner"
 )
 
 var (
-	// Save the created spinner.
 	spinners map[uint64]*spinner.Spinner
 	count    uint64
 )
