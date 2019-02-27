@@ -21,3 +21,4 @@ script:
   - gometalinter --install
   - gometalinter --config=.gometalinter.json --vendor ./...
   - goveralls -service=travis-ci
+  - make release && make clean
